@@ -1,7 +1,7 @@
 {
   "formatVersion": "v1",
   "repository": "febiyan/data-platform-contract",
-  "revision": "0f99cea18193f7aca75e3f117b502fe7feb4d6dd",
+  "revision": "aea6ad77f618c090c648fddd1b3027d11501aaed",
   "title": "Data platform requests",
   "description": "Ask for a team or a workspace. Your answers are checked as you type and you see what will happen. Then GitHub opens with everything filled in, ready to submit.",
   "site": {
@@ -110,7 +110,6 @@
     },
     "warnings": {
       "regionDropped": "A global team has no business region, so the region is left out.",
-      "noStgForPowerBi": "Power BI has no stg, so stg is skipped for Power BI.",
       "premiumApproval": "Power BI Premium needs approval from your director and procurement before it is merged.",
       "leavesWorkspaces": "The team also leaves workspace {workspaces}."
     }
@@ -628,7 +627,7 @@
           "id": "environments",
           "widget": "checkboxes",
           "label": "Environments",
-          "description": "dev to try things, stg to test them, prd for real use. Power BI has dev and prd only.",
+          "description": "dev to try things, stg to test them, prd for real use.",
           "required": true,
           "options": [
             {
@@ -1224,7 +1223,7 @@
           "type": "object",
           "title": "Power BI",
           "description": "Reports and dashboards in Power BI.",
-          "$comment": "A Power BI workspace per listed environment: a dev and prd pair, no stg.",
+          "$comment": "A Power BI workspace per listed environment, stg included (analytics decision 014).",
           "properties": {
             "license": {
               "type": "object",
@@ -1258,17 +1257,7 @@
               "additionalProperties": false
             },
             "environments": {
-              "type": "array",
-              "title": "Environments",
-              "description": "Power BI has dev and prd only.",
-              "items": {
-                "enum": [
-                  "dev",
-                  "prd"
-                ]
-              },
-              "minItems": 1,
-              "uniqueItems": true
+              "$ref": "#/$defs/environments"
             }
           },
           "required": [

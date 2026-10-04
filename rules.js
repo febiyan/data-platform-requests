@@ -170,7 +170,7 @@ function teamDoc(base, request) {
 }
 
 function platformPart(platform, request, wanted) {
-  const environments = wanted.filter((e) => !(platform === "powerbi" && e === "stg"));
+  const environments = [...wanted];
   if (platform === "databricks") return { ...(request.variant ? { variant: request.variant } : {}), environments };
   return { license: { mode: request.licenseMode || "pro" }, environments };
 }
@@ -260,7 +260,6 @@ const checks = {
     for (const p of platforms) {
       if (doc[p].environments.length) result.outcome(fill(form.outcome.platform, { ...platformVars(s, form, p, doc[p]), groups: groups(s, p, ws) }));
     }
-    if (platforms.includes("powerbi") && (request.environments || []).includes("stg")) result.warning(warnings.noStgForPowerBi, "environments");
     if (request.licenseMode === "premium") result.warning(warnings.premiumApproval, "licenseMode");
   },
 
