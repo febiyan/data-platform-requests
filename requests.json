@@ -1,7 +1,7 @@
 {
   "formatVersion": "v1",
   "repository": "febiyan/data-platform-contract",
-  "revision": "aea6ad77f618c090c648fddd1b3027d11501aaed",
+  "revision": "a01055f5580e076b90e638882852fd2409c16679",
   "title": "Data platform requests",
   "description": "Ask for a team or a workspace. Your answers are checked as you type and you see what will happen. Then GitHub opens with everything filled in, ready to submit.",
   "site": {
@@ -63,14 +63,12 @@
       "ready": "Ready to submit",
       "whatHappens": "What will happen",
       "approvedByBot": "Approved automatically",
-      "approvedByPeople": "Approved by people",
-      "botMerges": "The bot also merges it once the checks pass.",
-      "peopleReason": "A person reviews this kind of request: the approvers of the teams involved.",
+      "approvedAndMergedByBot": "Approved and merged automatically once the checks pass",
+      "approvedByPeople": "Reviewed by the approvers of the teams involved",
       "requestJson": "The request as the bot reads it",
       "open": "Open on GitHub",
       "copyLink": "Copy link",
       "copied": "Link copied",
-      "tickReminder": "If GitHub opens with boxes unticked, tick them again: {ticks}.",
       "access": "You need access to {repository} on GitHub to submit. After you submit, the bot replies on the issue with a pull request, or with what to fix.",
       "dataAsOf": "Teams and workspaces as of {revision}. The bot checks every request again against the latest state."
     },
@@ -122,8 +120,8 @@
       "template": "team-create",
       "issueTitle": "Create team {displayName}",
       "outcome": {
-        "created": "New team **{name}** with ID [[{id}]]. The ID never changes, even if the name does.",
-        "approvers": "Its approvers approve who joins the team in My Access, and any change to it."
+        "created": "A new team, **{name}**, with the ID [[{id}]]",
+        "approvers": "Its approvers decide who joins in My Access"
       },
       "fields": [
         {
@@ -272,7 +270,7 @@
       "template": "team-change",
       "issueTitle": "Change team {team}",
       "outcome": {
-        "changed": "**{name}**: {changes}. The ID stays [[{id}]].",
+        "changed": "**{name}**: {changes}",
         "change": "{field} becomes **{value}**",
         "regionDropped": "business region removed, since the team is global"
       },
@@ -456,7 +454,7 @@
       "template": "team-delete",
       "issueTitle": "Delete team {team}",
       "outcome": {
-        "deleted": "Team **{name}** is deleted."
+        "deleted": "**{name}** is deleted"
       },
       "fields": [
         {
@@ -513,8 +511,8 @@
       "template": "workspace-create",
       "issueTitle": "Request a workspace for {team.name}",
       "outcome": {
-        "created": "Workspace **{workspace}**, owned by **{name}**. The final number is set when the pull request opens.",
-        "platform": "{platform} ({kind}) in {environments}. Access groups {groups}, created by the cyber security pipeline."
+        "created": "A new workspace owned by **{name}**",
+        "platform": "{platform}, {kind}, in {environments}"
       },
       "fields": [
         {
@@ -660,8 +658,8 @@
       "template": "workspace-change",
       "issueTitle": "Change workspace {workspace}",
       "outcome": {
-        "changed": "Workspace **{workspace}** ({name}): {changes}.",
-        "addPlatform": "adds {platform} ({kind}) in {environments}",
+        "changed": "Workspace **{workspace}**: {changes}",
+        "addPlatform": "adds {platform}, {kind}, in {environments}",
         "licence": "Power BI licence becomes **{licence}**",
         "environments": "environments become {environments}",
         "leaves": "{team} leaves",
@@ -900,9 +898,9 @@
       "template": "workspace-delete",
       "issueTitle": "Remove workspace {workspace}",
       "outcome": {
-        "removed": "Workspace **{workspace}** is removed from every platform and environment once merged.",
-        "teams": "It comes off {teams}.",
-        "data": "Catalogs and data are never deleted."
+        "removed": "Workspace **{workspace}** is removed everywhere",
+        "teams": "{teams} lose access",
+        "data": "Catalogs and data are kept"
       },
       "fields": [
         {

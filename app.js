@@ -329,15 +329,11 @@ function update(changedField) {
     if (wasHidden) replay(review, "appear");
     $("outcome").replaceChildren(...result.outcome.map((line) => el("li", {}, icon("check"), el("span", {}, rich(line)))));
     $("notes").replaceChildren(...result.warnings.filter((w) => !w.field).map((w) => el("p", { class: "field-note" }, icon("info"), el("span", { text: w.message }))));
+    // Who approves, in one line; the policy's reason shows on hover.
     const approval = decide(result.request, data.policy);
-    $("approval").replaceChildren(el("div", { class: `approval${approval.auto ? " auto" : ""}` },
-      el("span", { class: "approval-icon" }, icon(approval.auto ? "bot" : "person")),
-      el("div", {},
-        el("strong", { text: approval.auto ? copy.approvedByBot : copy.approvedByPeople }),
-        el("p", { text: approval.auto ? [approval.reason, approval.merge ? copy.botMerges : ""].join(" ").trim() : copy.peopleReason }))));
-    const ticks = form.fields.filter((f) => f.widget === "checkboxes" && values[f.id].length).map((f) => `${f.label}: ${values[f.id].join(", ")}`);
-    $("tick-reminder").hidden = !ticks.length;
-    $("tick-reminder").replaceChildren(...(ticks.length ? [icon("info"), el("span", { text: fill(copy.tickReminder, { ticks: ticks.join("; ") }) })] : []));
+    const who = approval.auto ? (approval.merge ? copy.approvedAndMergedByBot : copy.approvedByBot) : copy.approvedByPeople;
+    $("approval").replaceChildren(el("p", { class: `approval${approval.auto ? " auto" : ""}`, title: approval.reason },
+      icon(approval.auto ? "bot" : "person"), el("span", { text: who })));
     $("request-json").textContent = JSON.stringify(result.request, null, 2);
   }
 

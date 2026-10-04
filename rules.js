@@ -188,12 +188,6 @@ function nextNumber(s) {
   return String(number).padStart(3, "0");
 }
 
-// SEC-<platform>-<number>-<role>, from the workspace schema's x-access-groups.
-function groups(s, platform, ws) {
-  const naming = s.schemas.workspace["x-access-groups"];
-  return Object.values(naming.roles).map((role) => `[[${fill(naming.pattern, { platform: naming.platforms[platform], workspace: ws, role })}]]`).join(" ");
-}
-
 function platformVars(s, form, platform, part) {
   const w = s.w;
   const platformName = w.label(form, form.fields.some((f) => f.id === "platforms") ? "platforms" : "addPlatform", platform);
@@ -258,7 +252,7 @@ const checks = {
     schemaCheck(s, "workspace", doc, result, form);
     if (team && platforms.length) result.outcome(fill(form.outcome.created, { workspace: ws, name: team.displayName }));
     for (const p of platforms) {
-      if (doc[p].environments.length) result.outcome(fill(form.outcome.platform, { ...platformVars(s, form, p, doc[p]), groups: groups(s, p, ws) }));
+      if (doc[p].environments.length) result.outcome(fill(form.outcome.platform, platformVars(s, form, p, doc[p])));
     }
     if (request.licenseMode === "premium") result.warning(warnings.premiumApproval, "licenseMode");
   },
