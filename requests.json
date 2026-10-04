@@ -1,7 +1,7 @@
 {
   "formatVersion": "v1",
   "repository": "febiyan/data-platform-contract",
-  "revision": "96ce7701e2cb35f719537f582f2a0e6f430e6e6f",
+  "revision": "0f99cea18193f7aca75e3f117b502fe7feb4d6dd",
   "title": "Data platform requests",
   "description": "Ask for a team or a workspace. Your answers are checked as you type and you see what will happen. Then GitHub opens with everything filled in, ready to submit.",
   "site": {
@@ -49,7 +49,7 @@
       }
     },
     "copy": {
-      "required": "Required",
+      "optional": "Optional",
       "choose": "Choose…",
       "none": "None",
       "keep": {
@@ -57,13 +57,11 @@
         "textarea": "Leave it empty to keep the current list.",
         "dropdown": "Leave it at None to keep the current value."
       },
-      "preview": "Preview",
-      "ready": "Ready to submit",
+      "back": "All requests",
+      "requiredLeft": "{count} required left",
       "toFixCount": "{count} to fix",
-      "toFix": "To fix",
-      "goodToKnow": "Good to know",
+      "ready": "Ready to submit",
       "whatHappens": "What will happen",
-      "outcomeEmpty": "Fill in the form to see what will happen.",
       "approvedByBot": "Approved automatically",
       "approvedByPeople": "Approved by people",
       "botMerges": "The bot also merges it once the checks pass.",
@@ -71,6 +69,7 @@
       "requestJson": "The request as the bot reads it",
       "open": "Open on GitHub",
       "copyLink": "Copy link",
+      "copied": "Link copied",
       "tickReminder": "If GitHub opens with boxes unticked, tick them again: {ticks}.",
       "access": "You need access to {repository} on GitHub to submit. After you submit, the bot replies on the issue with a pull request, or with what to fix.",
       "dataAsOf": "Teams and workspaces as of {revision}. The bot checks every request again against the latest state."

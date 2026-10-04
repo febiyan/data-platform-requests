@@ -207,7 +207,7 @@ const checks = {
     const id = slugify(request.displayName || "");
     if (request.displayName && !id) return result.field("displayName", refusals.nameNeedsLetters);
     if (id && s.teams.has(id)) return result.field("displayName", fill(refusals.teamExists, { id }));
-    if (request.reach === "global" && request.region != null) result.warning(warnings.regionDropped);
+    if (request.reach === "global" && request.region != null) result.warning(warnings.regionDropped, "region");
     schemaCheck(s, "team", teamDoc({ formatVersion: "v1", kind: "team", id: id || "x" }, request), result, form);
     if (id) {
       result.outcome(fill(form.outcome.created, { name: request.displayName, id }));
@@ -244,7 +244,7 @@ const checks = {
     if (owned.length) return result.field("team", fill(refusals.ownsWorkspaces, { team: team.displayName, workspaces: owned.join(", ") }));
     result.outcome(fill(form.outcome.deleted, { name: team.displayName }));
     const joined = team.workspaces.map((e) => e.workspace);
-    if (joined.length) result.warning(fill(warnings.leavesWorkspaces, { workspaces: joined.join(", ") }));
+    if (joined.length) result.warning(fill(warnings.leavesWorkspaces, { workspaces: joined.join(", ") }), "team");
   },
 
   "create-workspace"(request, form, s, result) {
@@ -260,8 +260,8 @@ const checks = {
     for (const p of platforms) {
       if (doc[p].environments.length) result.outcome(fill(form.outcome.platform, { ...platformVars(s, form, p, doc[p]), groups: groups(s, p, ws) }));
     }
-    if (platforms.includes("powerbi") && (request.environments || []).includes("stg")) result.warning(warnings.noStgForPowerBi);
-    if (request.licenseMode === "premium") result.warning(warnings.premiumApproval);
+    if (platforms.includes("powerbi") && (request.environments || []).includes("stg")) result.warning(warnings.noStgForPowerBi, "environments");
+    if (request.licenseMode === "premium") result.warning(warnings.premiumApproval, "licenseMode");
   },
 
   "change-workspace"(request, form, s, result) {
@@ -311,7 +311,7 @@ const checks = {
     if (!changes.length && !result.hasErrors()) return result.error(refusals.nothingChangedWorkspace);
     const owner = s.ownerOf(current.id);
     if (changes.length) result.outcome(fill(o.changed, { ...vars, name: owner?.displayName ?? "", changes: changes.join("; ") }));
-    if (request.licenseMode === "premium") result.warning(warnings.premiumApproval);
+    if (request.licenseMode === "premium") result.warning(warnings.premiumApproval, "licenseMode");
   },
 
   "delete-workspace"(request, form, s, result) {
@@ -334,7 +334,7 @@ export function check(form, values, state) {
   const result = {
     field: (id, message) => { fieldErrors[id] ??= message; },
     error: (message) => { if (!errors.includes(message)) errors.push(message); },
-    warning: (message) => warnings.push(message),
+    warning: (message, field = null) => warnings.push({ message, field }),
     outcome: (text) => outcome.push(text),
     hasErrors: () => Object.keys(fieldErrors).length + errors.length > 0,
   };

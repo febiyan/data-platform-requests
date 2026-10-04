@@ -17,17 +17,20 @@
   <header class="hero">
     <div class="hero-inner">
       <div class="brand"><span class="brand-mark" data-icon="layers"></span><span id="brand" class="brand-name"></span></div>
-      <h1 id="heading"></h1>
-      <p id="lead" class="lead"></p>
-      <ol id="steps" class="steps"></ol>
+      <div class="hero-intro">
+        <h1 id="heading"></h1>
+        <p id="lead" class="lead"></p>
+        <ol id="steps" class="steps"></ol>
+      </div>
     </div>
   </header>
 
   <main>
     <nav id="actions"></nav>
 
-    <div id="workarea" hidden>
-      <form id="request" novalidate>
+    <section id="workarea" hidden>
+      <button id="back" type="button" class="back"><span data-icon="back"></span><span id="back-label"></span></button>
+      <form id="request" class="sheet" novalidate>
         <div class="form-head">
           <span id="form-icon" class="form-icon"></span>
           <div>
@@ -37,31 +40,30 @@
         </div>
         <p id="form-intro" class="intro"></p>
         <div id="fields"></div>
+        <section id="review" class="review" hidden aria-live="polite">
+          <h3 id="review-title"></h3>
+          <ul id="outcome" class="outcome"></ul>
+          <div id="notes"></div>
+          <div id="approval"></div>
+          <p id="tick-reminder" class="note tick" hidden></p>
+          <details id="technical" hidden><summary id="json-title"></summary><pre id="request-json"></pre></details>
+          <p id="access" class="note"></p>
+        </section>
       </form>
-
-      <aside id="preview" aria-live="polite">
-        <div class="preview-head">
-          <h2 id="preview-title"></h2>
-          <span id="status-pill" class="pill"></span>
-        </div>
-        <div id="problems"></div>
-        <div id="outcome"></div>
-        <div id="approval"></div>
-        <details id="technical">
-          <summary><span data-icon="code"></span><span id="json-title"></span></summary>
-          <pre id="request-json"></pre>
-        </details>
-        <div class="submit">
-          <a id="open-issue" class="cta" target="_blank" rel="noopener noreferrer" aria-disabled="true">
-            <span id="open-label"></span><span data-icon="external"></span>
-          </a>
-          <button id="copy-link" type="button" class="ghost" disabled><span data-icon="copy"></span></button>
-        </div>
-        <p id="tick-reminder" class="note tick" hidden></p>
-        <p id="access" class="note"></p>
-      </aside>
-    </div>
+    </section>
   </main>
+
+  <div id="bar" class="bar" hidden>
+    <div class="bar-inner">
+      <span id="bar-status" class="bar-status" aria-live="polite"></span>
+      <div class="bar-actions">
+        <button id="copy-link" type="button" class="ghost" disabled><span data-icon="copy"></span></button>
+        <a id="open-issue" class="cta" target="_blank" rel="noopener noreferrer" role="button">
+          <span id="open-label"></span><span data-icon="external"></span>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <footer>
     <p id="data-version"></p>
