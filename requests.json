@@ -1,7 +1,7 @@
 {
   "formatVersion": "v1",
   "repository": "febiyan/data-platform-contract",
-  "revision": "03d586626a79395b13a5ad4c425967a9e9fad36c",
+  "revision": "5182de1c013af810259b022f729e93cc77a70da5",
   "forms": [
     {
       "template": "team-create.yml",
@@ -602,6 +602,265 @@
       ]
     }
   ],
+  "schemas": {
+    "team": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://platform-gitops.example/schemas/team.v1.schema.json",
+      "$comment": "Illustrative stable identifier only; this URL is not deployed. Load this schema from the repository.",
+      "title": "Illustrative team v1",
+      "type": "object",
+      "properties": {
+        "formatVersion": {
+          "const": "v1"
+        },
+        "kind": {
+          "const": "team"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Stable team identity; never changes, even when the display name does."
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "reach": {
+          "enum": [
+            "global",
+            "regional"
+          ],
+          "description": "Whether the team works globally or within one business region."
+        },
+        "region": {
+          "enum": [
+            "amer",
+            "emea",
+            "apac"
+          ],
+          "description": "Business region, not an Azure region. Placeholder values until the region list is defined."
+        },
+        "costCenter": {
+          "type": "string",
+          "pattern": "^[A-Z][0-9]{4}$",
+          "description": "One capital letter followed by four digits, for example K1234."
+        },
+        "orgUnit": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "enum": [
+                "department",
+                "project",
+                "program",
+                "initiative"
+              ]
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "type",
+            "name"
+          ],
+          "additionalProperties": false
+        },
+        "approvers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "An email address, for example jo@example.com.",
+            "format": "email",
+            "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+          },
+          "minItems": 2,
+          "uniqueItems": true,
+          "description": "People who approve changes to this team. A separate automated flow replaces approvers who leave."
+        },
+        "workspaces": {
+          "type": "array",
+          "description": "The workspaces this team owns or has joined, each with one role (analytics decision 009). Every workspace has exactly one owner team, which also holds the contributor role.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "workspace": {
+                "type": "string",
+                "pattern": "^[0-9]{3}$",
+                "description": "Workspace number, as in desired-state/workspaces/<number>.yaml. Quote it."
+              },
+              "role": {
+                "enum": [
+                  "owner",
+                  "workspace-contributor",
+                  "workspace-observer"
+                ],
+                "description": "owner: accountable, approves joins and changes, builds. Admin is never a team role (analytics decision 003)."
+              }
+            },
+            "required": [
+              "workspace",
+              "role"
+            ],
+            "additionalProperties": false
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "formatVersion",
+        "kind",
+        "id",
+        "displayName",
+        "reach",
+        "costCenter",
+        "orgUnit",
+        "approvers"
+      ],
+      "additionalProperties": false,
+      "if": {
+        "properties": {
+          "reach": {
+            "const": "regional"
+          }
+        },
+        "required": [
+          "reach"
+        ]
+      },
+      "then": {
+        "required": [
+          "region"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "region"
+          ]
+        }
+      }
+    },
+    "workspace": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://platform-gitops.example/schemas/workspace.v1.schema.json",
+      "$comment": "Illustrative stable identifier only; this URL is not deployed. Load this schema from the repository. Cross-file rules (exactly one owning team, numbers) live in gitops/scripts/validate.py.",
+      "title": "Workspace v1",
+      "description": "The target state of one workspace: its number and, per platform, what should exist. Who may use it lives in the team files (desired-state/teams/). Group names are derived: SEC-<DBX|PBI>-<id>-<Owner|Contributor|Observer> (analytics decision 011).",
+      "type": "object",
+      "properties": {
+        "formatVersion": {
+          "const": "v1"
+        },
+        "kind": {
+          "const": "workspace"
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^(00[1-9]|0[1-9][0-9]|[1-9][0-9]{2})$",
+          "description": "Workspace number 001-999, unique across all platforms, set by the request automation. 000 is the shared sandbox groups. Never changes. The file name is <id>.yaml; quote it."
+        },
+        "databricks": {
+          "type": "object",
+          "description": "A Databricks workspace per listed environment.",
+          "properties": {
+            "variant": {
+              "enum": [
+                "serverless",
+                "classic"
+              ],
+              "description": "serverless = 'Analyse and report', classic = 'Build data pipelines'."
+            },
+            "environments": {
+              "$ref": "#/$defs/environments"
+            }
+          },
+          "required": [
+            "variant",
+            "environments"
+          ],
+          "additionalProperties": false
+        },
+        "powerbi": {
+          "type": "object",
+          "description": "A Power BI workspace per listed environment: a dev and prd pair, no stg.",
+          "properties": {
+            "license": {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "enum": [
+                    "pro",
+                    "premium"
+                  ],
+                  "description": "premium = a workspace on an F SKU capacity; needs director and procurement approval (contract decision 001)."
+                },
+                "capacityRef": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "Set by platform engineering once procurement assigns a capacity."
+                }
+              },
+              "required": [
+                "mode"
+              ],
+              "additionalProperties": false
+            },
+            "environments": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "dev",
+                  "prd"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "license",
+            "environments"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "formatVersion",
+        "kind",
+        "id"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "databricks"
+          ]
+        },
+        {
+          "required": [
+            "powerbi"
+          ]
+        }
+      ],
+      "additionalProperties": false,
+      "$defs": {
+        "environments": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "dev",
+              "stg",
+              "prd"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      }
+    }
+  },
   "policy": [
     {
       "action": "create-team",
@@ -687,7 +946,9 @@
         ]
       },
       "powerbi": {
-        "licenseMode": "pro",
+        "license": {
+          "mode": "pro"
+        },
         "environments": [
           "dev",
           "prd"
@@ -713,7 +974,9 @@
         ]
       },
       "powerbi": {
-        "licenseMode": "pro",
+        "license": {
+          "mode": "pro"
+        },
         "environments": [
           "dev",
           "prd"
@@ -723,7 +986,9 @@
     {
       "id": "004",
       "powerbi": {
-        "licenseMode": "pro",
+        "license": {
+          "mode": "pro"
+        },
         "environments": [
           "prd"
         ]
