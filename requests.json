@@ -1,0 +1,733 @@
+{
+  "formatVersion": "v1",
+  "repository": "febiyan/data-platform-contract",
+  "revision": "03d586626a79395b13a5ad4c425967a9e9fad36c",
+  "forms": [
+    {
+      "template": "team-create.yml",
+      "action": "create-team",
+      "title": "Create a team",
+      "intro": "A team is the group of people that owns and joins workspaces. People join it in My Access, approved by its approvers.",
+      "fields": [
+        {
+          "id": "displayName",
+          "type": "input",
+          "label": "Team name",
+          "required": true,
+          "description": "Shown in Power BI and Port. The team ID is made from it and never changes.",
+          "options": null
+        },
+        {
+          "id": "reach",
+          "type": "dropdown",
+          "label": "Reach",
+          "required": true,
+          "description": null,
+          "options": [
+            {
+              "label": "Regional",
+              "value": "regional"
+            },
+            {
+              "label": "Global",
+              "value": "global"
+            }
+          ]
+        },
+        {
+          "id": "region",
+          "type": "dropdown",
+          "label": "Business region",
+          "required": true,
+          "description": "Not an Azure region. Pick Not regional for a global team.",
+          "options": [
+            {
+              "label": "amer",
+              "value": "amer"
+            },
+            {
+              "label": "emea",
+              "value": "emea"
+            },
+            {
+              "label": "apac",
+              "value": "apac"
+            },
+            {
+              "label": "Not regional",
+              "value": null
+            }
+          ]
+        },
+        {
+          "id": "costCenter",
+          "type": "input",
+          "label": "Cost center",
+          "required": true,
+          "description": "One capital letter and four digits, e.g. K1234.",
+          "options": null
+        },
+        {
+          "id": "orgUnitType",
+          "type": "dropdown",
+          "label": "Organisation unit type",
+          "required": true,
+          "description": null,
+          "options": [
+            {
+              "label": "Department",
+              "value": "department"
+            },
+            {
+              "label": "Project",
+              "value": "project"
+            },
+            {
+              "label": "Program",
+              "value": "program"
+            },
+            {
+              "label": "Initiative",
+              "value": "initiative"
+            }
+          ]
+        },
+        {
+          "id": "orgUnitName",
+          "type": "input",
+          "label": "Organisation unit name",
+          "required": true,
+          "description": "e.g. Commercial",
+          "options": null
+        },
+        {
+          "id": "approvers",
+          "type": "textarea",
+          "label": "Approvers",
+          "required": true,
+          "description": "At least two emails, one per line. They approve people joining the team and changes to it.",
+          "options": null
+        }
+      ]
+    },
+    {
+      "template": "team-change.yml",
+      "action": "change-team",
+      "title": "Change a team",
+      "intro": "Change any detail of an existing team.",
+      "fields": [
+        {
+          "id": "team",
+          "type": "dropdown",
+          "label": "Team",
+          "required": true,
+          "description": null,
+          "options": [
+            {
+              "label": "D&A Commercial (d-a-merchandising)",
+              "value": "d-a-merchandising"
+            },
+            {
+              "label": "D&A Manufacturing (d-a-manufacturing)",
+              "value": "d-a-manufacturing"
+            },
+            {
+              "label": "US Sales Analytics (us-sales-analytics)",
+              "value": "us-sales-analytics"
+            },
+            {
+              "label": "US Support (us-support)",
+              "value": "us-support"
+            }
+          ]
+        },
+        {
+          "id": "displayName",
+          "type": "input",
+          "label": "Team name",
+          "required": false,
+          "description": "Opened from the team list, this shows the current value. Leave it, or leave it empty, to keep it.",
+          "options": null
+        },
+        {
+          "id": "reach",
+          "type": "dropdown",
+          "label": "Reach",
+          "required": false,
+          "description": "Opened from the team list, this shows the current value. Leave it, or leave it at None, to keep it.",
+          "options": [
+            {
+              "label": "Regional",
+              "value": "regional"
+            },
+            {
+              "label": "Global",
+              "value": "global"
+            }
+          ]
+        },
+        {
+          "id": "region",
+          "type": "dropdown",
+          "label": "Business region",
+          "required": false,
+          "description": "Opened from the team list, this shows the current value. Leave it, or leave it at None, to keep it.",
+          "options": [
+            {
+              "label": "amer",
+              "value": "amer"
+            },
+            {
+              "label": "emea",
+              "value": "emea"
+            },
+            {
+              "label": "apac",
+              "value": "apac"
+            },
+            {
+              "label": "Not regional",
+              "value": null
+            }
+          ]
+        },
+        {
+          "id": "costCenter",
+          "type": "input",
+          "label": "Cost center",
+          "required": false,
+          "description": "Opened from the team list, this shows the current value. Leave it, or leave it empty, to keep it.",
+          "options": null
+        },
+        {
+          "id": "orgUnitType",
+          "type": "dropdown",
+          "label": "Organisation unit type",
+          "required": false,
+          "description": "Opened from the team list, this shows the current value. Leave it, or leave it at None, to keep it.",
+          "options": [
+            {
+              "label": "Department",
+              "value": "department"
+            },
+            {
+              "label": "Project",
+              "value": "project"
+            },
+            {
+              "label": "Program",
+              "value": "program"
+            },
+            {
+              "label": "Initiative",
+              "value": "initiative"
+            }
+          ]
+        },
+        {
+          "id": "orgUnitName",
+          "type": "input",
+          "label": "Organisation unit name",
+          "required": false,
+          "description": "Opened from the team list, this shows the current value. Leave it, or leave it empty, to keep it.",
+          "options": null
+        },
+        {
+          "id": "approvers",
+          "type": "textarea",
+          "label": "Approvers",
+          "required": false,
+          "description": "Opened from the team list, this shows the current list. Leave it, or leave it empty, to keep it.",
+          "options": null
+        }
+      ]
+    },
+    {
+      "template": "team-delete.yml",
+      "action": "delete-team",
+      "title": "Delete a team",
+      "intro": "A team can be deleted only when it owns no workspace and has joined none.",
+      "fields": [
+        {
+          "id": "team",
+          "type": "dropdown",
+          "label": "Team",
+          "required": true,
+          "description": null,
+          "options": [
+            {
+              "label": "D&A Commercial (d-a-merchandising)",
+              "value": "d-a-merchandising"
+            },
+            {
+              "label": "D&A Manufacturing (d-a-manufacturing)",
+              "value": "d-a-manufacturing"
+            },
+            {
+              "label": "US Sales Analytics (us-sales-analytics)",
+              "value": "us-sales-analytics"
+            },
+            {
+              "label": "US Support (us-support)",
+              "value": "us-support"
+            }
+          ]
+        },
+        {
+          "id": "reason",
+          "type": "textarea",
+          "label": "Reason",
+          "required": false,
+          "description": null,
+          "options": null
+        }
+      ]
+    },
+    {
+      "template": "workspace-create.yml",
+      "action": "create-workspace",
+      "title": "Request a workspace",
+      "intro": "Your team owns the workspace and can build in it. Other teams join later. One workspace can have a Databricks part, a Power BI part, or both, sharing one number. Not sure which type? Read [Which workspace type do I need?](https://github.com/febiyan/data-platform-contract/blob/main/docs/guides/choose-a-workspace-type.md).",
+      "fields": [
+        {
+          "id": "team",
+          "type": "dropdown",
+          "label": "Team",
+          "required": true,
+          "description": null,
+          "options": [
+            {
+              "label": "D&A Commercial (d-a-merchandising)",
+              "value": "d-a-merchandising"
+            },
+            {
+              "label": "D&A Manufacturing (d-a-manufacturing)",
+              "value": "d-a-manufacturing"
+            },
+            {
+              "label": "US Sales Analytics (us-sales-analytics)",
+              "value": "us-sales-analytics"
+            },
+            {
+              "label": "US Support (us-support)",
+              "value": "us-support"
+            }
+          ]
+        },
+        {
+          "id": "platforms",
+          "type": "checkboxes",
+          "label": "Platforms",
+          "required": true,
+          "description": null,
+          "options": [
+            {
+              "label": "Databricks",
+              "value": "databricks"
+            },
+            {
+              "label": "Power BI",
+              "value": "powerbi"
+            }
+          ]
+        },
+        {
+          "id": "variant",
+          "type": "dropdown",
+          "label": "Databricks type",
+          "required": false,
+          "description": "Only if you ticked Databricks.",
+          "options": [
+            {
+              "label": "Analyse and report",
+              "value": "serverless"
+            },
+            {
+              "label": "Build data pipelines",
+              "value": "classic"
+            }
+          ]
+        },
+        {
+          "id": "licenseMode",
+          "type": "dropdown",
+          "label": "Power BI licence",
+          "required": false,
+          "description": "Only if you ticked Power BI. Premium needs approval from your director and procurement.",
+          "options": [
+            {
+              "label": "Pro",
+              "value": "pro"
+            },
+            {
+              "label": "Premium",
+              "value": "premium"
+            }
+          ]
+        },
+        {
+          "id": "environments",
+          "type": "checkboxes",
+          "label": "Environments",
+          "required": true,
+          "description": "Power BI is a dev and prd pair: stg is ignored for Power BI.",
+          "options": [
+            {
+              "label": "dev",
+              "value": "dev"
+            },
+            {
+              "label": "stg",
+              "value": "stg"
+            },
+            {
+              "label": "prd",
+              "value": "prd"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "template": "workspace-change.yml",
+      "action": "change-workspace",
+      "title": "Change a workspace",
+      "intro": "Let another team join or leave, add a platform, change the Power BI licence, or change environments. Fill in only what changes.",
+      "fields": [
+        {
+          "id": "workspace",
+          "type": "dropdown",
+          "label": "Workspace",
+          "required": true,
+          "description": null,
+          "options": [
+            {
+              "label": "US Sales Analytics (001)",
+              "value": "001"
+            },
+            {
+              "label": "D&A Commercial (002)",
+              "value": "002"
+            },
+            {
+              "label": "D&A Manufacturing (003)",
+              "value": "003"
+            },
+            {
+              "label": "D&A Manufacturing (004)",
+              "value": "004"
+            }
+          ]
+        },
+        {
+          "id": "addTeam",
+          "type": "dropdown",
+          "label": "Team to add",
+          "required": false,
+          "description": "Leave at None if no team joins. It joins with one role (analytics decision 009).",
+          "options": [
+            {
+              "label": "D&A Commercial (d-a-merchandising)",
+              "value": "d-a-merchandising"
+            },
+            {
+              "label": "D&A Manufacturing (d-a-manufacturing)",
+              "value": "d-a-manufacturing"
+            },
+            {
+              "label": "US Sales Analytics (us-sales-analytics)",
+              "value": "us-sales-analytics"
+            },
+            {
+              "label": "US Support (us-support)",
+              "value": "us-support"
+            }
+          ]
+        },
+        {
+          "id": "addRole",
+          "type": "dropdown",
+          "label": "Role of the added team",
+          "required": false,
+          "description": null,
+          "options": [
+            {
+              "label": "Contributor (builds)",
+              "value": "workspace-contributor"
+            },
+            {
+              "label": "Observer (supports, no compute)",
+              "value": "workspace-observer"
+            }
+          ]
+        },
+        {
+          "id": "removeTeam",
+          "type": "dropdown",
+          "label": "Team to remove",
+          "required": false,
+          "description": null,
+          "options": [
+            {
+              "label": "D&A Commercial (d-a-merchandising)",
+              "value": "d-a-merchandising"
+            },
+            {
+              "label": "D&A Manufacturing (d-a-manufacturing)",
+              "value": "d-a-manufacturing"
+            },
+            {
+              "label": "US Sales Analytics (us-sales-analytics)",
+              "value": "us-sales-analytics"
+            },
+            {
+              "label": "US Support (us-support)",
+              "value": "us-support"
+            }
+          ]
+        },
+        {
+          "id": "addPlatform",
+          "type": "dropdown",
+          "label": "Platform to add",
+          "required": false,
+          "description": null,
+          "options": [
+            {
+              "label": "Databricks",
+              "value": "databricks"
+            },
+            {
+              "label": "Power BI",
+              "value": "powerbi"
+            }
+          ]
+        },
+        {
+          "id": "variant",
+          "type": "dropdown",
+          "label": "Databricks type of the added platform",
+          "required": false,
+          "description": null,
+          "options": [
+            {
+              "label": "Analyse and report",
+              "value": "serverless"
+            },
+            {
+              "label": "Build data pipelines",
+              "value": "classic"
+            }
+          ]
+        },
+        {
+          "id": "licenseMode",
+          "type": "dropdown",
+          "label": "Power BI licence",
+          "required": false,
+          "description": "Leave at None to keep the current licence. Premium needs approval from your director and procurement.",
+          "options": [
+            {
+              "label": "Pro",
+              "value": "pro"
+            },
+            {
+              "label": "Premium",
+              "value": "premium"
+            }
+          ]
+        },
+        {
+          "id": "environments",
+          "type": "checkboxes",
+          "label": "Environments",
+          "required": false,
+          "description": "Tick the full new set, or none to keep the current environments.",
+          "options": [
+            {
+              "label": "dev",
+              "value": "dev"
+            },
+            {
+              "label": "stg",
+              "value": "stg"
+            },
+            {
+              "label": "prd",
+              "value": "prd"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "template": "workspace-delete.yml",
+      "action": "delete-workspace",
+      "title": "Remove a workspace",
+      "intro": "Removes the workspace on every platform and in every environment once merged. Catalogs and data are never deleted.",
+      "fields": [
+        {
+          "id": "workspace",
+          "type": "dropdown",
+          "label": "Workspace",
+          "required": true,
+          "description": null,
+          "options": [
+            {
+              "label": "US Sales Analytics (001)",
+              "value": "001"
+            },
+            {
+              "label": "D&A Commercial (002)",
+              "value": "002"
+            },
+            {
+              "label": "D&A Manufacturing (003)",
+              "value": "003"
+            },
+            {
+              "label": "D&A Manufacturing (004)",
+              "value": "004"
+            }
+          ]
+        },
+        {
+          "id": "reason",
+          "type": "textarea",
+          "label": "Reason",
+          "required": false,
+          "description": null,
+          "options": null
+        }
+      ]
+    }
+  ],
+  "policy": [
+    {
+      "action": "create-team",
+      "when": {},
+      "merge": true,
+      "reason": "A new team owns no workspace yet, and its approvers are named in the request."
+    },
+    {
+      "action": "create-workspace",
+      "when": {
+        "licenseMode": [
+          "pro",
+          null
+        ]
+      },
+      "merge": true,
+      "reason": "A Databricks or Power BI Pro workspace for the requesting team; nobody else gets access."
+    }
+  ],
+  "teams": [
+    {
+      "id": "d-a-merchandising",
+      "displayName": "D&A Commercial",
+      "reach": "global",
+      "region": null,
+      "workspaces": [
+        {
+          "workspace": "002",
+          "role": "owner"
+        }
+      ]
+    },
+    {
+      "id": "d-a-manufacturing",
+      "displayName": "D&A Manufacturing",
+      "reach": "global",
+      "region": null,
+      "workspaces": [
+        {
+          "workspace": "003",
+          "role": "owner"
+        },
+        {
+          "workspace": "004",
+          "role": "owner"
+        }
+      ]
+    },
+    {
+      "id": "us-sales-analytics",
+      "displayName": "US Sales Analytics",
+      "reach": "regional",
+      "region": "amer",
+      "workspaces": [
+        {
+          "workspace": "001",
+          "role": "owner"
+        }
+      ]
+    },
+    {
+      "id": "us-support",
+      "displayName": "US Support",
+      "reach": "regional",
+      "region": "amer",
+      "workspaces": [
+        {
+          "workspace": "001",
+          "role": "workspace-observer"
+        }
+      ]
+    }
+  ],
+  "workspaces": [
+    {
+      "id": "001",
+      "databricks": {
+        "variant": "serverless",
+        "environments": [
+          "dev",
+          "stg",
+          "prd"
+        ]
+      },
+      "powerbi": {
+        "licenseMode": "pro",
+        "environments": [
+          "dev",
+          "prd"
+        ]
+      }
+    },
+    {
+      "id": "002",
+      "databricks": {
+        "variant": "serverless",
+        "environments": [
+          "dev"
+        ]
+      }
+    },
+    {
+      "id": "003",
+      "databricks": {
+        "variant": "serverless",
+        "environments": [
+          "dev",
+          "prd"
+        ]
+      },
+      "powerbi": {
+        "licenseMode": "pro",
+        "environments": [
+          "dev",
+          "prd"
+        ]
+      }
+    },
+    {
+      "id": "004",
+      "powerbi": {
+        "licenseMode": "pro",
+        "environments": [
+          "prd"
+        ]
+      }
+    }
+  ]
+}

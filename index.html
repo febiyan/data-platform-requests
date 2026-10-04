@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>Data platform requests</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="top">
+    <h1>Data platform requests</h1>
+    <p class="lead">Ask for a team or a workspace. This page checks your request as you type, shows what will happen, then opens it on GitHub, already filled in. Nothing is sent until you submit it there.</p>
+  </header>
+
+  <main>
+    <nav id="actions" aria-label="What do you need?"></nav>
+
+    <div id="workarea" hidden>
+      <form id="request" novalidate>
+        <h2 id="form-title"></h2>
+        <p id="form-intro" class="intro"></p>
+        <div id="fields"></div>
+      </form>
+
+      <aside id="preview" aria-live="polite">
+        <h2>Preview</h2>
+        <div id="problems"></div>
+        <div id="outcome"></div>
+        <div id="approval"></div>
+        <details id="technical">
+          <summary>Request as the bot reads it</summary>
+          <pre id="request-json"></pre>
+        </details>
+        <div class="submit">
+          <a id="open-issue" class="button" target="_blank" rel="noopener noreferrer" aria-disabled="true">Open on GitHub</a>
+          <button id="copy-link" type="button" class="secondary" disabled>Copy link</button>
+        </div>
+        <p id="tick-reminder" class="note" hidden></p>
+        <p class="note">You need access to <span id="repo-name"></span> on GitHub. After you submit, a bot replies on the issue with the pull request, or with what to fix.</p>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <p id="data-version"></p>
+  </footer>
+</body>
+</html>
