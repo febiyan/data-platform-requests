@@ -1,603 +1,956 @@
 {
   "formatVersion": "v1",
   "repository": "febiyan/data-platform-contract",
-  "revision": "5182de1c013af810259b022f729e93cc77a70da5",
+  "revision": "96ce7701e2cb35f719537f582f2a0e6f430e6e6f",
+  "title": "Data platform requests",
+  "description": "Ask for a team or a workspace. Your answers are checked as you type and you see what will happen. Then GitHub opens with everything filled in, ready to submit.",
+  "site": {
+    "brand": "Data platform",
+    "heading": "What do you need?",
+    "steps": [
+      {
+        "icon": "pointer",
+        "title": "Pick",
+        "text": "what you need"
+      },
+      {
+        "icon": "shield",
+        "title": "Check",
+        "text": "as you type"
+      },
+      {
+        "icon": "send",
+        "title": "Submit",
+        "text": "on GitHub"
+      }
+    ],
+    "groups": {
+      "team": {
+        "icon": "users",
+        "title": "Teams",
+        "description": "The people who own and join workspaces"
+      },
+      "workspace": {
+        "icon": "layers",
+        "title": "Workspaces",
+        "description": "Databricks and Power BI, under one number"
+      }
+    },
+    "verbs": {
+      "create": {
+        "icon": "plus"
+      },
+      "change": {
+        "icon": "pencil"
+      },
+      "delete": {
+        "icon": "trash",
+        "danger": true
+      }
+    },
+    "copy": {
+      "required": "Required",
+      "choose": "Choose…",
+      "none": "None",
+      "keep": {
+        "input": "Leave it as it is, or empty, to keep the current value.",
+        "textarea": "Leave it empty to keep the current list.",
+        "dropdown": "Leave it at None to keep the current value."
+      },
+      "preview": "Preview",
+      "ready": "Ready to submit",
+      "toFixCount": "{count} to fix",
+      "toFix": "To fix",
+      "goodToKnow": "Good to know",
+      "whatHappens": "What will happen",
+      "outcomeEmpty": "Fill in the form to see what will happen.",
+      "approvedByBot": "Approved automatically",
+      "approvedByPeople": "Approved by people",
+      "botMerges": "The bot also merges it once the checks pass.",
+      "peopleReason": "A person reviews this kind of request: the approvers of the teams involved.",
+      "requestJson": "The request as the bot reads it",
+      "open": "Open on GitHub",
+      "copyLink": "Copy link",
+      "tickReminder": "If GitHub opens with boxes unticked, tick them again: {ticks}.",
+      "access": "You need access to {repository} on GitHub to submit. After you submit, the bot replies on the issue with a pull request, or with what to fix.",
+      "dataAsOf": "Teams and workspaces as of {revision}. The bot checks every request again against the latest state."
+    },
+    "issueForm": {
+      "showIf": "Only if you picked {value}.",
+      "showIfAny": "Only if you picked a {field}.",
+      "footer": "After you submit, the bot replies here with a pull request, or with what to fix. To fix a request, edit this issue: it runs again when you save."
+    },
+    "messages": {
+      "required": "Required.",
+      "tickOne": "Tick at least one.",
+      "requiredWhen": "Required when {field} is {value}.",
+      "pattern": "\"{value}\" doesn't fit. {description}",
+      "maxLength": "Use {limit} characters or fewer.",
+      "minItemsChoice": "Pick at least {limit}: {choices}.",
+      "minItemsLines": "Give at least {limit}, one per line.",
+      "minItems": "Give at least {limit}.",
+      "uniqueItems": "List each one only once.",
+      "enum": "Pick one of: {choices}.",
+      "anyOf": "Pick at least one.",
+      "not": "This combination isn't allowed.",
+      "other": "This isn't allowed ({keyword})."
+    },
+    "refusals": {
+      "nameNeedsLetters": "The name needs at least one letter or digit.",
+      "teamExists": "There is already a team called {id}. To change it, use Change a team.",
+      "pickTeam": "Pick a team.",
+      "pickWorkspace": "Pick a workspace.",
+      "ownsWorkspaces": "{team} owns workspace {workspaces}. Remove it, or hand it over to another team, first.",
+      "alreadyHasPlatform": "Workspace {workspace} already has {platform}.",
+      "noLicence": "Only Power BI has a licence, and workspace {workspace} has no Power BI.",
+      "noRole": "{team} has no role in workspace {workspace}.",
+      "ownerCannotLeave": "{team} owns workspace {workspace}. Hand it over to another team first.",
+      "alreadyHasRole": "{team} already has a role in workspace {workspace}. To change the role, remove the team first.",
+      "nothingChangedTeam": "Nothing has changed yet. Edit the fields you want to change; empty fields keep their current value.",
+      "nothingChangedWorkspace": "Nothing has changed yet. Fill in only what you want to change."
+    },
+    "warnings": {
+      "regionDropped": "A global team has no business region, so the region is left out.",
+      "noStgForPowerBi": "Power BI has no stg, so stg is skipped for Power BI.",
+      "premiumApproval": "Power BI Premium needs approval from your director and procurement before it is merged.",
+      "leavesWorkspaces": "The team also leaves workspace {workspaces}."
+    }
+  },
   "forms": [
     {
-      "template": "team-create.yml",
       "action": "create-team",
       "title": "Create a team",
-      "intro": "A team is the group of people that owns and joins workspaces. People join it in My Access, approved by its approvers.",
+      "intro": "A team is a group of people that owns and joins workspaces. People join it in My Access, approved by its approvers.",
+      "template": "team-create",
+      "issueTitle": "Create team {displayName}",
+      "outcome": {
+        "created": "New team **{name}** with ID [[{id}]]. The ID never changes, even if the name does.",
+        "approvers": "Its approvers approve who joins the team in My Access, and any change to it."
+      },
       "fields": [
         {
           "id": "displayName",
-          "type": "input",
+          "widget": "input",
           "label": "Team name",
+          "description": "How the team appears in Power BI, Port and the request forms. The team ID is made from it.",
           "required": true,
-          "description": "Shown in Power BI and Port. The team ID is made from it and never changes.",
-          "options": null
+          "options": null,
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": "Finance Analytics"
         },
         {
           "id": "reach",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Reach",
+          "description": "Whether the team works in one business region or across all of them.",
           "required": true,
-          "description": null,
           "options": [
             {
               "label": "Regional",
-              "value": "regional"
+              "value": "regional",
+              "description": "Works in one business region"
             },
             {
               "label": "Global",
-              "value": "global"
+              "value": "global",
+              "description": "Works across every region"
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "region",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Business region",
+          "description": "The business region the team works in. Pick Not regional for a global team.",
           "required": true,
-          "description": "Not an Azure region. Pick Not regional for a global team.",
           "options": [
             {
-              "label": "amer",
-              "value": "amer"
+              "label": "Americas",
+              "value": "amer",
+              "description": null
             },
             {
-              "label": "emea",
-              "value": "emea"
+              "label": "Europe, Middle East and Africa",
+              "value": "emea",
+              "description": null
             },
             {
-              "label": "apac",
-              "value": "apac"
+              "label": "Asia Pacific",
+              "value": "apac",
+              "description": null
             },
             {
               "label": "Not regional",
-              "value": null
+              "value": null,
+              "description": null
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "costCenter",
-          "type": "input",
+          "widget": "input",
           "label": "Cost center",
+          "description": "One capital letter and four digits, for example K1234.",
           "required": true,
-          "description": "One capital letter and four digits, e.g. K1234.",
-          "options": null
+          "options": null,
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": "K1234"
         },
         {
           "id": "orgUnitType",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Organisation unit type",
+          "description": "What kind of unit the team belongs to.",
           "required": true,
-          "description": null,
           "options": [
             {
               "label": "Department",
-              "value": "department"
+              "value": "department",
+              "description": null
             },
             {
               "label": "Project",
-              "value": "project"
+              "value": "project",
+              "description": null
             },
             {
               "label": "Program",
-              "value": "program"
+              "value": "program",
+              "description": null
             },
             {
               "label": "Initiative",
-              "value": "initiative"
+              "value": "initiative",
+              "description": null
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "orgUnitName",
-          "type": "input",
+          "widget": "input",
           "label": "Organisation unit name",
+          "description": "The name of that department, project, program or initiative.",
           "required": true,
-          "description": "e.g. Commercial",
-          "options": null
+          "options": null,
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": "Commercial"
         },
         {
           "id": "approvers",
-          "type": "textarea",
+          "widget": "textarea",
           "label": "Approvers",
+          "description": "At least two people, one email per line. They approve who joins the team and any change to it.",
           "required": true,
-          "description": "At least two emails, one per line. They approve people joining the team and changes to it.",
-          "options": null
+          "options": null,
+          "source": null,
+          "list": true,
+          "showIf": null,
+          "example": "jo@example.com\nkim@example.com"
         }
       ]
     },
     {
-      "template": "team-change.yml",
       "action": "change-team",
       "title": "Change a team",
-      "intro": "Change any detail of an existing team.",
+      "intro": "Rename a team, or change its region, cost center, organisation unit or approvers.",
+      "template": "team-change",
+      "issueTitle": "Change team {team}",
+      "outcome": {
+        "changed": "**{name}**: {changes}. The ID stays [[{id}]].",
+        "change": "{field} becomes **{value}**",
+        "regionDropped": "business region removed, since the team is global"
+      },
       "fields": [
         {
           "id": "team",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Team",
-          "required": true,
           "description": null,
+          "required": true,
           "options": [
             {
               "label": "D&A Commercial (d-a-merchandising)",
-              "value": "d-a-merchandising"
+              "value": "d-a-merchandising",
+              "description": null
             },
             {
               "label": "D&A Manufacturing (d-a-manufacturing)",
-              "value": "d-a-manufacturing"
+              "value": "d-a-manufacturing",
+              "description": null
             },
             {
               "label": "US Sales Analytics (us-sales-analytics)",
-              "value": "us-sales-analytics"
+              "value": "us-sales-analytics",
+              "description": null
             },
             {
               "label": "US Support (us-support)",
-              "value": "us-support"
+              "value": "us-support",
+              "description": null
             }
-          ]
+          ],
+          "source": "teams",
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "displayName",
-          "type": "input",
+          "widget": "input",
           "label": "Team name",
+          "description": "Leave it as it is, or empty, to keep the current value.",
           "required": false,
-          "description": "Opened from the team list, this shows the current value. Leave it, or leave it empty, to keep it.",
-          "options": null
+          "options": null,
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": "Finance Analytics"
         },
         {
           "id": "reach",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Reach",
+          "description": "Leave it at None to keep the current value.",
           "required": false,
-          "description": "Opened from the team list, this shows the current value. Leave it, or leave it at None, to keep it.",
           "options": [
             {
               "label": "Regional",
-              "value": "regional"
+              "value": "regional",
+              "description": "Works in one business region"
             },
             {
               "label": "Global",
-              "value": "global"
+              "value": "global",
+              "description": "Works across every region"
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "region",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Business region",
+          "description": "Leave it at None to keep the current value.",
           "required": false,
-          "description": "Opened from the team list, this shows the current value. Leave it, or leave it at None, to keep it.",
           "options": [
             {
-              "label": "amer",
-              "value": "amer"
+              "label": "Americas",
+              "value": "amer",
+              "description": null
             },
             {
-              "label": "emea",
-              "value": "emea"
+              "label": "Europe, Middle East and Africa",
+              "value": "emea",
+              "description": null
             },
             {
-              "label": "apac",
-              "value": "apac"
+              "label": "Asia Pacific",
+              "value": "apac",
+              "description": null
             },
             {
               "label": "Not regional",
-              "value": null
+              "value": null,
+              "description": null
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "costCenter",
-          "type": "input",
+          "widget": "input",
           "label": "Cost center",
+          "description": "Leave it as it is, or empty, to keep the current value.",
           "required": false,
-          "description": "Opened from the team list, this shows the current value. Leave it, or leave it empty, to keep it.",
-          "options": null
+          "options": null,
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": "K1234"
         },
         {
           "id": "orgUnitType",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Organisation unit type",
+          "description": "Leave it at None to keep the current value.",
           "required": false,
-          "description": "Opened from the team list, this shows the current value. Leave it, or leave it at None, to keep it.",
           "options": [
             {
               "label": "Department",
-              "value": "department"
+              "value": "department",
+              "description": null
             },
             {
               "label": "Project",
-              "value": "project"
+              "value": "project",
+              "description": null
             },
             {
               "label": "Program",
-              "value": "program"
+              "value": "program",
+              "description": null
             },
             {
               "label": "Initiative",
-              "value": "initiative"
+              "value": "initiative",
+              "description": null
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "orgUnitName",
-          "type": "input",
+          "widget": "input",
           "label": "Organisation unit name",
+          "description": "Leave it as it is, or empty, to keep the current value.",
           "required": false,
-          "description": "Opened from the team list, this shows the current value. Leave it, or leave it empty, to keep it.",
-          "options": null
+          "options": null,
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": "Commercial"
         },
         {
           "id": "approvers",
-          "type": "textarea",
+          "widget": "textarea",
           "label": "Approvers",
+          "description": "Leave it empty to keep the current list.",
           "required": false,
-          "description": "Opened from the team list, this shows the current list. Leave it, or leave it empty, to keep it.",
-          "options": null
+          "options": null,
+          "source": null,
+          "list": true,
+          "showIf": null,
+          "example": "jo@example.com\nkim@example.com"
         }
       ]
     },
     {
-      "template": "team-delete.yml",
       "action": "delete-team",
       "title": "Delete a team",
-      "intro": "A team can be deleted only when it owns no workspace and has joined none.",
+      "intro": "Delete a team that owns no workspace. It leaves any workspace it has joined.",
+      "template": "team-delete",
+      "issueTitle": "Delete team {team}",
+      "outcome": {
+        "deleted": "Team **{name}** is deleted."
+      },
       "fields": [
         {
           "id": "team",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Team",
-          "required": true,
           "description": null,
+          "required": true,
           "options": [
             {
               "label": "D&A Commercial (d-a-merchandising)",
-              "value": "d-a-merchandising"
+              "value": "d-a-merchandising",
+              "description": null
             },
             {
               "label": "D&A Manufacturing (d-a-manufacturing)",
-              "value": "d-a-manufacturing"
+              "value": "d-a-manufacturing",
+              "description": null
             },
             {
               "label": "US Sales Analytics (us-sales-analytics)",
-              "value": "us-sales-analytics"
+              "value": "us-sales-analytics",
+              "description": null
             },
             {
               "label": "US Support (us-support)",
-              "value": "us-support"
+              "value": "us-support",
+              "description": null
             }
-          ]
+          ],
+          "source": "teams",
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "reason",
-          "type": "textarea",
+          "widget": "textarea",
           "label": "Reason",
+          "description": "Optional. Helps the approvers understand why.",
           "required": false,
-          "description": null,
-          "options": null
+          "options": null,
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         }
       ]
     },
     {
-      "template": "workspace-create.yml",
       "action": "create-workspace",
       "title": "Request a workspace",
-      "intro": "Your team owns the workspace and can build in it. Other teams join later. One workspace can have a Databricks part, a Power BI part, or both, sharing one number. Not sure which type? Read [Which workspace type do I need?](https://github.com/febiyan/data-platform-contract/blob/main/docs/guides/choose-a-workspace-type.md).",
+      "intro": "Your team owns the new workspace and can build in it; other teams can join later. A workspace can have a Databricks part, a Power BI part, or both, under one number. Not sure which you need? Read [Which workspace type do I need?](https://github.com/febiyan/data-platform-contract/blob/main/docs/guides/choose-a-workspace-type.md).",
+      "template": "workspace-create",
+      "issueTitle": "Request a workspace for {team.name}",
+      "outcome": {
+        "created": "Workspace **{workspace}**, owned by **{name}**. The final number is set when the pull request opens.",
+        "platform": "{platform} ({kind}) in {environments}. Access groups {groups}, created by the cyber security pipeline."
+      },
       "fields": [
         {
           "id": "team",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Team",
+          "description": "The team that will own the workspace.",
           "required": true,
-          "description": null,
           "options": [
             {
               "label": "D&A Commercial (d-a-merchandising)",
-              "value": "d-a-merchandising"
+              "value": "d-a-merchandising",
+              "description": null
             },
             {
               "label": "D&A Manufacturing (d-a-manufacturing)",
-              "value": "d-a-manufacturing"
+              "value": "d-a-manufacturing",
+              "description": null
             },
             {
               "label": "US Sales Analytics (us-sales-analytics)",
-              "value": "us-sales-analytics"
+              "value": "us-sales-analytics",
+              "description": null
             },
             {
               "label": "US Support (us-support)",
-              "value": "us-support"
+              "value": "us-support",
+              "description": null
             }
-          ]
+          ],
+          "source": "teams",
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "platforms",
-          "type": "checkboxes",
+          "widget": "checkboxes",
           "label": "Platforms",
+          "description": "Pick one or both. They share one workspace number.",
           "required": true,
-          "description": null,
           "options": [
             {
               "label": "Databricks",
-              "value": "databricks"
+              "value": "databricks",
+              "description": "Notebooks, SQL and pipelines"
             },
             {
               "label": "Power BI",
-              "value": "powerbi"
+              "value": "powerbi",
+              "description": "Reports and dashboards"
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "variant",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Databricks type",
+          "description": "What the team will mostly do in Databricks.",
           "required": false,
-          "description": "Only if you ticked Databricks.",
           "options": [
             {
               "label": "Analyse and report",
-              "value": "serverless"
+              "value": "serverless",
+              "description": "SQL, notebooks and dashboards on serverless compute"
             },
             {
               "label": "Build data pipelines",
-              "value": "classic"
+              "value": "classic",
+              "description": "Scheduled jobs and pipelines on clusters you configure"
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": {
+            "platforms": "databricks"
+          },
+          "example": null
         },
         {
           "id": "licenseMode",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Power BI licence",
+          "description": "Pro suits most teams. Premium needs approval from your director and procurement.",
           "required": false,
-          "description": "Only if you ticked Power BI. Premium needs approval from your director and procurement.",
           "options": [
             {
               "label": "Pro",
-              "value": "pro"
+              "value": "pro",
+              "description": "Shared capacity; everyone who views needs a Pro licence"
             },
             {
               "label": "Premium",
-              "value": "premium"
+              "value": "premium",
+              "description": "Dedicated capacity; needs director and procurement approval"
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": {
+            "platforms": "powerbi"
+          },
+          "example": null
         },
         {
           "id": "environments",
-          "type": "checkboxes",
+          "widget": "checkboxes",
           "label": "Environments",
+          "description": "dev to try things, stg to test them, prd for real use. Power BI has dev and prd only.",
           "required": true,
-          "description": "Power BI is a dev and prd pair: stg is ignored for Power BI.",
           "options": [
             {
               "label": "dev",
-              "value": "dev"
+              "value": "dev",
+              "description": null
             },
             {
               "label": "stg",
-              "value": "stg"
+              "value": "stg",
+              "description": null
             },
             {
               "label": "prd",
-              "value": "prd"
+              "value": "prd",
+              "description": null
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         }
       ]
     },
     {
-      "template": "workspace-change.yml",
       "action": "change-workspace",
       "title": "Change a workspace",
-      "intro": "Let another team join or leave, add a platform, change the Power BI licence, or change environments. Fill in only what changes.",
+      "intro": "Let a team join or leave, add a platform, change the Power BI licence, or change the environments. Fill in only what changes.",
+      "template": "workspace-change",
+      "issueTitle": "Change workspace {workspace}",
+      "outcome": {
+        "changed": "Workspace **{workspace}** ({name}): {changes}.",
+        "addPlatform": "adds {platform} ({kind}) in {environments}",
+        "licence": "Power BI licence becomes **{licence}**",
+        "environments": "environments become {environments}",
+        "leaves": "{team} leaves",
+        "joins": "{team} joins as {role}"
+      },
       "fields": [
         {
           "id": "workspace",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Workspace",
-          "required": true,
           "description": null,
+          "required": true,
           "options": [
             {
               "label": "US Sales Analytics (001)",
-              "value": "001"
+              "value": "001",
+              "description": null
             },
             {
               "label": "D&A Commercial (002)",
-              "value": "002"
+              "value": "002",
+              "description": null
             },
             {
               "label": "D&A Manufacturing (003)",
-              "value": "003"
+              "value": "003",
+              "description": null
             },
             {
               "label": "D&A Manufacturing (004)",
-              "value": "004"
+              "value": "004",
+              "description": null
             }
-          ]
+          ],
+          "source": "workspaces",
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "addTeam",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Team to add",
+          "description": "Leave it at None if no team joins. A team has one role per workspace.",
           "required": false,
-          "description": "Leave at None if no team joins. It joins with one role (analytics decision 009).",
           "options": [
             {
               "label": "D&A Commercial (d-a-merchandising)",
-              "value": "d-a-merchandising"
+              "value": "d-a-merchandising",
+              "description": null
             },
             {
               "label": "D&A Manufacturing (d-a-manufacturing)",
-              "value": "d-a-manufacturing"
+              "value": "d-a-manufacturing",
+              "description": null
             },
             {
               "label": "US Sales Analytics (us-sales-analytics)",
-              "value": "us-sales-analytics"
+              "value": "us-sales-analytics",
+              "description": null
             },
             {
               "label": "US Support (us-support)",
-              "value": "us-support"
+              "value": "us-support",
+              "description": null
             }
-          ]
+          ],
+          "source": "teams",
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "addRole",
-          "type": "dropdown",
-          "label": "Role of the added team",
-          "required": false,
+          "widget": "dropdown",
+          "label": "Role of the team that joins",
           "description": null,
+          "required": false,
           "options": [
             {
-              "label": "Contributor (builds)",
-              "value": "workspace-contributor"
+              "label": "Contributor",
+              "value": "workspace-contributor",
+              "description": "Builds in the workspace"
             },
             {
-              "label": "Observer (supports, no compute)",
-              "value": "workspace-observer"
+              "label": "Observer",
+              "value": "workspace-observer",
+              "description": "Looks and supports, with no compute"
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": {
+            "addTeam": true
+          },
+          "example": null
         },
         {
           "id": "removeTeam",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Team to remove",
+          "description": "The owner team can't leave; hand the workspace over first.",
           "required": false,
-          "description": null,
           "options": [
             {
               "label": "D&A Commercial (d-a-merchandising)",
-              "value": "d-a-merchandising"
+              "value": "d-a-merchandising",
+              "description": null
             },
             {
               "label": "D&A Manufacturing (d-a-manufacturing)",
-              "value": "d-a-manufacturing"
+              "value": "d-a-manufacturing",
+              "description": null
             },
             {
               "label": "US Sales Analytics (us-sales-analytics)",
-              "value": "us-sales-analytics"
+              "value": "us-sales-analytics",
+              "description": null
             },
             {
               "label": "US Support (us-support)",
-              "value": "us-support"
+              "value": "us-support",
+              "description": null
             }
-          ]
+          ],
+          "source": "teams",
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "addPlatform",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Platform to add",
-          "required": false,
           "description": null,
+          "required": false,
           "options": [
             {
               "label": "Databricks",
-              "value": "databricks"
+              "value": "databricks",
+              "description": null
             },
             {
               "label": "Power BI",
-              "value": "powerbi"
+              "value": "powerbi",
+              "description": null
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "variant",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Databricks type of the added platform",
+          "description": "What the team will mostly do in Databricks.",
           "required": false,
-          "description": null,
           "options": [
             {
               "label": "Analyse and report",
-              "value": "serverless"
+              "value": "serverless",
+              "description": "SQL, notebooks and dashboards on serverless compute"
             },
             {
               "label": "Build data pipelines",
-              "value": "classic"
+              "value": "classic",
+              "description": "Scheduled jobs and pipelines on clusters you configure"
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": {
+            "addPlatform": "databricks"
+          },
+          "example": null
         },
         {
           "id": "licenseMode",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Power BI licence",
+          "description": "Leave it at None to keep the current licence. Premium needs approval from your director and procurement.",
           "required": false,
-          "description": "Leave at None to keep the current licence. Premium needs approval from your director and procurement.",
           "options": [
             {
               "label": "Pro",
-              "value": "pro"
+              "value": "pro",
+              "description": "Shared capacity; everyone who views needs a Pro licence"
             },
             {
               "label": "Premium",
-              "value": "premium"
+              "value": "premium",
+              "description": "Dedicated capacity; needs director and procurement approval"
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "environments",
-          "type": "checkboxes",
+          "widget": "checkboxes",
           "label": "Environments",
-          "required": false,
           "description": "Tick the full new set, or none to keep the current environments.",
+          "required": false,
           "options": [
             {
               "label": "dev",
-              "value": "dev"
+              "value": "dev",
+              "description": null
             },
             {
               "label": "stg",
-              "value": "stg"
+              "value": "stg",
+              "description": null
             },
             {
               "label": "prd",
-              "value": "prd"
+              "value": "prd",
+              "description": null
             }
-          ]
+          ],
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         }
       ]
     },
     {
-      "template": "workspace-delete.yml",
       "action": "delete-workspace",
       "title": "Remove a workspace",
-      "intro": "Removes the workspace on every platform and in every environment once merged. Catalogs and data are never deleted.",
+      "intro": "Removes the workspace from every platform and environment once merged. Catalogs and data are never deleted.",
+      "template": "workspace-delete",
+      "issueTitle": "Remove workspace {workspace}",
+      "outcome": {
+        "removed": "Workspace **{workspace}** is removed from every platform and environment once merged.",
+        "teams": "It comes off {teams}.",
+        "data": "Catalogs and data are never deleted."
+      },
       "fields": [
         {
           "id": "workspace",
-          "type": "dropdown",
+          "widget": "dropdown",
           "label": "Workspace",
-          "required": true,
           "description": null,
+          "required": true,
           "options": [
             {
               "label": "US Sales Analytics (001)",
-              "value": "001"
+              "value": "001",
+              "description": null
             },
             {
               "label": "D&A Commercial (002)",
-              "value": "002"
+              "value": "002",
+              "description": null
             },
             {
               "label": "D&A Manufacturing (003)",
-              "value": "003"
+              "value": "003",
+              "description": null
             },
             {
               "label": "D&A Manufacturing (004)",
-              "value": "004"
+              "value": "004",
+              "description": null
             }
-          ]
+          ],
+          "source": "workspaces",
+          "list": false,
+          "showIf": null,
+          "example": null
         },
         {
           "id": "reason",
-          "type": "textarea",
+          "widget": "textarea",
           "label": "Reason",
+          "description": "Optional. Helps the approvers understand why.",
           "required": false,
-          "description": null,
-          "options": null
+          "options": null,
+          "source": null,
+          "list": false,
+          "showIf": null,
+          "example": null
         }
       ]
     }
@@ -606,8 +959,9 @@
     "team": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://platform-gitops.example/schemas/team.v1.schema.json",
-      "$comment": "Illustrative stable identifier only; this URL is not deployed. Load this schema from the repository.",
-      "title": "Illustrative team v1",
+      "$comment": "Illustrative stable identifier only; this URL is not deployed. Load this schema from the repository. title, description, examples and x-enum-titles are what requesters read in the request site, the issue forms and the bot's messages; technical notes go in $comment.",
+      "title": "Team",
+      "description": "A group of people that owns and joins workspaces. People join it in My Access, approved by its approvers.",
       "type": "object",
       "properties": {
         "formatVersion": {
@@ -619,19 +973,34 @@
         "id": {
           "type": "string",
           "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
-          "description": "Stable team identity; never changes, even when the display name does."
+          "title": "Team ID",
+          "description": "Made from the team name when the team is created. It never changes, even when the name does."
         },
         "displayName": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 100
+          "maxLength": 100,
+          "title": "Team name",
+          "description": "How the team appears in Power BI, Port and the request forms. The team ID is made from it.",
+          "examples": [
+            "Finance Analytics"
+          ]
         },
         "reach": {
           "enum": [
             "global",
             "regional"
           ],
-          "description": "Whether the team works globally or within one business region."
+          "title": "Reach",
+          "description": "Whether the team works in one business region or across all of them.",
+          "x-enum-titles": {
+            "regional": "Regional",
+            "global": "Global"
+          },
+          "x-enum-descriptions": {
+            "regional": "Works in one business region",
+            "global": "Works across every region"
+          }
         },
         "region": {
           "enum": [
@@ -639,12 +1008,23 @@
             "emea",
             "apac"
           ],
-          "description": "Business region, not an Azure region. Placeholder values until the region list is defined."
+          "$comment": "Placeholder values until the region list is defined.",
+          "title": "Business region",
+          "description": "The business region the team works in. This is not an Azure region.",
+          "x-enum-titles": {
+            "amer": "Americas",
+            "emea": "Europe, Middle East and Africa",
+            "apac": "Asia Pacific"
+          }
         },
         "costCenter": {
           "type": "string",
           "pattern": "^[A-Z][0-9]{4}$",
-          "description": "One capital letter followed by four digits, for example K1234."
+          "title": "Cost center",
+          "description": "One capital letter and four digits, for example K1234.",
+          "examples": [
+            "K1234"
+          ]
         },
         "orgUnit": {
           "type": "object",
@@ -655,11 +1035,24 @@
                 "project",
                 "program",
                 "initiative"
-              ]
+              ],
+              "title": "Organisation unit type",
+              "description": "What kind of unit the team belongs to.",
+              "x-enum-titles": {
+                "department": "Department",
+                "project": "Project",
+                "program": "Program",
+                "initiative": "Initiative"
+              }
             },
             "name": {
               "type": "string",
-              "minLength": 1
+              "minLength": 1,
+              "title": "Organisation unit name",
+              "description": "The name of that department, project, program or initiative.",
+              "examples": [
+                "Commercial"
+              ]
             }
           },
           "required": [
@@ -678,18 +1071,26 @@
           },
           "minItems": 2,
           "uniqueItems": true,
-          "description": "People who approve changes to this team. A separate automated flow replaces approvers who leave."
+          "title": "Approvers",
+          "description": "At least two people, one email per line. They approve who joins the team and any change to it.",
+          "examples": [
+            "jo@example.com\nkim@example.com"
+          ],
+          "$comment": "A separate automated flow replaces approvers who leave."
         },
         "workspaces": {
           "type": "array",
-          "description": "The workspaces this team owns or has joined, each with one role (analytics decision 009). Every workspace has exactly one owner team, which also holds the contributor role.",
+          "title": "Workspaces",
+          "description": "The workspaces this team owns or has joined, each with one role.",
+          "$comment": "One role per workspace (analytics decision 009). Every workspace has exactly one owner team, which also holds the contributor role.",
           "items": {
             "type": "object",
             "properties": {
               "workspace": {
                 "type": "string",
                 "pattern": "^[0-9]{3}$",
-                "description": "Workspace number, as in desired-state/workspaces/<number>.yaml. Quote it."
+                "title": "Workspace",
+                "$comment": "Workspace number, as in desired-state/workspaces/<number>.yaml. Quote it."
               },
               "role": {
                 "enum": [
@@ -697,7 +1098,18 @@
                   "workspace-contributor",
                   "workspace-observer"
                 ],
-                "description": "owner: accountable, approves joins and changes, builds. Admin is never a team role (analytics decision 003)."
+                "title": "Role",
+                "$comment": "Admin is never a team role (analytics decision 003).",
+                "x-enum-titles": {
+                  "owner": "Owner",
+                  "workspace-contributor": "Contributor",
+                  "workspace-observer": "Observer"
+                },
+                "x-enum-descriptions": {
+                  "owner": "Accountable for the workspace, approves who joins, and builds in it",
+                  "workspace-contributor": "Builds in the workspace",
+                  "workspace-observer": "Looks and supports, with no compute"
+                }
               }
             },
             "required": [
@@ -746,10 +1158,23 @@
     "workspace": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "$id": "https://platform-gitops.example/schemas/workspace.v1.schema.json",
-      "$comment": "Illustrative stable identifier only; this URL is not deployed. Load this schema from the repository. Cross-file rules (exactly one owning team, numbers) live in gitops/scripts/validate.py.",
-      "title": "Workspace v1",
-      "description": "The target state of one workspace: its number and, per platform, what should exist. Who may use it lives in the team files (desired-state/teams/). Group names are derived: SEC-<DBX|PBI>-<id>-<Owner|Contributor|Observer> (analytics decision 011).",
+      "$comment": "Illustrative stable identifier only; this URL is not deployed. Load this schema from the repository. Cross-file rules (exactly one owning team, numbers) live in gitops/scripts/validate.py. Who may use a workspace lives in the team files (desired-state/teams/). title, description and x-enum-titles are what requesters read; technical notes go in $comment.",
+      "title": "Workspace",
+      "description": "A place to build and share data work, with a Databricks part, a Power BI part, or both, under one number.",
       "type": "object",
+      "x-access-groups": {
+        "$comment": "Group names are derived, never chosen (analytics decision 011). The cyber security pipeline creates them; the platform only looks them up (analytics decision 010).",
+        "pattern": "SEC-{platform}-{workspace}-{role}",
+        "platforms": {
+          "databricks": "DBX",
+          "powerbi": "PBI"
+        },
+        "roles": {
+          "owner": "Owner",
+          "workspace-contributor": "Contributor",
+          "workspace-observer": "Observer"
+        }
+      },
       "properties": {
         "formatVersion": {
           "const": "v1"
@@ -760,18 +1185,31 @@
         "id": {
           "type": "string",
           "pattern": "^(00[1-9]|0[1-9][0-9]|[1-9][0-9]{2})$",
-          "description": "Workspace number 001-999, unique across all platforms, set by the request automation. 000 is the shared sandbox groups. Never changes. The file name is <id>.yaml; quote it."
+          "title": "Workspace number",
+          "description": "Set for you when the request is accepted, and never changes.",
+          "$comment": "Number 001-999, unique across all platforms. 000 is the shared sandbox groups. The file name is <id>.yaml; quote it."
         },
         "databricks": {
           "type": "object",
-          "description": "A Databricks workspace per listed environment.",
+          "title": "Databricks",
+          "description": "Notebooks, SQL and pipelines on Databricks.",
+          "$comment": "A Databricks workspace per listed environment.",
           "properties": {
             "variant": {
               "enum": [
                 "serverless",
                 "classic"
               ],
-              "description": "serverless = 'Analyse and report', classic = 'Build data pipelines'."
+              "title": "Databricks type",
+              "description": "What the team will mostly do in Databricks.",
+              "x-enum-titles": {
+                "serverless": "Analyse and report",
+                "classic": "Build data pipelines"
+              },
+              "x-enum-descriptions": {
+                "serverless": "SQL, notebooks and dashboards on serverless compute",
+                "classic": "Scheduled jobs and pipelines on clusters you configure"
+              }
             },
             "environments": {
               "$ref": "#/$defs/environments"
@@ -785,7 +1223,9 @@
         },
         "powerbi": {
           "type": "object",
-          "description": "A Power BI workspace per listed environment: a dev and prd pair, no stg.",
+          "title": "Power BI",
+          "description": "Reports and dashboards in Power BI.",
+          "$comment": "A Power BI workspace per listed environment: a dev and prd pair, no stg.",
           "properties": {
             "license": {
               "type": "object",
@@ -795,12 +1235,22 @@
                     "pro",
                     "premium"
                   ],
-                  "description": "premium = a workspace on an F SKU capacity; needs director and procurement approval (contract decision 001)."
+                  "title": "Power BI licence",
+                  "description": "Pro suits most teams. Premium needs approval from your director and procurement.",
+                  "$comment": "premium = a workspace on an F SKU capacity (contract decision 001).",
+                  "x-enum-titles": {
+                    "pro": "Pro",
+                    "premium": "Premium"
+                  },
+                  "x-enum-descriptions": {
+                    "pro": "Shared capacity; everyone who views needs a Pro licence",
+                    "premium": "Dedicated capacity; needs director and procurement approval"
+                  }
                 },
                 "capacityRef": {
                   "type": "string",
                   "minLength": 1,
-                  "description": "Set by platform engineering once procurement assigns a capacity."
+                  "$comment": "Set by platform engineering once procurement assigns a capacity."
                 }
               },
               "required": [
@@ -810,6 +1260,8 @@
             },
             "environments": {
               "type": "array",
+              "title": "Environments",
+              "description": "Power BI has dev and prd only.",
               "items": {
                 "enum": [
                   "dev",
@@ -848,6 +1300,8 @@
       "$defs": {
         "environments": {
           "type": "array",
+          "title": "Environments",
+          "description": "Where the workspace exists. dev to try things, stg to test them, prd for real use.",
           "items": {
             "enum": [
               "dev",

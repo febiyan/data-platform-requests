@@ -185,6 +185,33 @@ select {
 .chip input:checked + span .tick .icon { opacity: 1; transform: none; }
 .field.invalid .chip > span { border-color: color-mix(in srgb, var(--danger) 60%, var(--line-strong)); }
 
+/* Choice cards: one choice (radio) or several (checkbox), each with its description */
+.option-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.option-card { position: relative; display: block; cursor: pointer; }
+.option-card input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.option-body {
+  display: flex; gap: 12px; align-items: flex-start; height: 100%; padding: 14px;
+  border: 1.5px solid var(--line-strong); border-radius: var(--radius-sm); background: var(--bg-raised);
+  transition: border-color .18s var(--ease), background .18s var(--ease), box-shadow .18s var(--ease), transform .12s var(--ease);
+}
+.option-card:hover .option-body { border-color: var(--text-3); }
+.option-card input:active + .option-body { transform: scale(.985); }
+.option-card input:focus-visible + .option-body { box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent); }
+.option-mark {
+  display: grid; place-items: center; flex: none; width: 20px; height: 20px; margin-top: 1px;
+  border: 1.5px solid var(--line-strong); border-radius: 50%; color: var(--accent-text);
+  transition: background .18s, border-color .18s;
+}
+.option-cards.checkbox .option-mark { border-radius: 6px; }
+.option-mark .icon { width: 13px; height: 13px; stroke-width: 3; opacity: 0; transform: scale(.4); transition: opacity .15s, transform .2s var(--ease); }
+.option-text strong { display: block; font-size: 0.95rem; }
+.option-text span { display: block; color: var(--text-3); font-size: 0.85rem; line-height: 1.4; margin-top: 2px; }
+.option-card input:checked + .option-body { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent); }
+.option-card input:checked + .option-body .option-mark { background: var(--accent); border-color: var(--accent); }
+.option-card input:checked + .option-body .option-mark .icon { opacity: 1; transform: none; }
+.option-card input:checked + .option-body .option-text strong { color: var(--accent); }
+.field.invalid .option-body { border-color: color-mix(in srgb, var(--danger) 60%, var(--line-strong)); }
+
 /* Preview */
 .preview-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 14px; }
 .preview-head h2 { margin: 0; font-size: 1.15rem; letter-spacing: -0.02em; }

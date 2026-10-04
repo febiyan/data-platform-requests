@@ -6,30 +6,25 @@
   <meta name="referrer" content="no-referrer">
   <meta name="color-scheme" content="light dark">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
-  <title>Data platform requests</title>
+  <title>Requests</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%234f46e5'/%3E%3Cpath d='m12 5 7 3.5-7 3.5-7-3.5z M5 15.5l7 3.5 7-3.5 M5 12l7 3.5 7-3.5' fill='none' stroke='white' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css">
   <script type="module" src="app.js"></script>
 </head>
 <body>
+  <!-- Layout only: every word on this page comes from requests.json, which
+       gitops/scripts/site_data.py builds from schemas/request.v1.schema.json. -->
   <header class="hero">
     <div class="hero-inner">
-      <div class="brand">
-        <span class="brand-mark" data-icon="layers"></span>
-        <span class="brand-name">Data platform</span>
-      </div>
-      <h1>What do you need?</h1>
-      <p class="lead">Ask for a team or a workspace. Your answers are checked as you type, you see what will happen, then GitHub opens with everything filled in.</p>
-      <ol class="steps" aria-label="How it works">
-        <li><span class="step-icon" data-icon="pointer"></span><span><b>Pick</b> an action</span></li>
-        <li><span class="step-icon" data-icon="shield"></span><span><b>Fill in</b> and get checked</span></li>
-        <li><span class="step-icon" data-icon="send"></span><span><b>Submit</b> on GitHub</span></li>
-      </ol>
+      <div class="brand"><span class="brand-mark" data-icon="layers"></span><span id="brand" class="brand-name"></span></div>
+      <h1 id="heading"></h1>
+      <p id="lead" class="lead"></p>
+      <ol id="steps" class="steps"></ol>
     </div>
   </header>
 
   <main>
-    <nav id="actions" aria-label="Actions"></nav>
+    <nav id="actions"></nav>
 
     <div id="workarea" hidden>
       <form id="request" novalidate>
@@ -46,24 +41,24 @@
 
       <aside id="preview" aria-live="polite">
         <div class="preview-head">
-          <h2>Preview</h2>
+          <h2 id="preview-title"></h2>
           <span id="status-pill" class="pill"></span>
         </div>
         <div id="problems"></div>
         <div id="outcome"></div>
         <div id="approval"></div>
         <details id="technical">
-          <summary><span data-icon="code"></span>Request as the bot reads it</summary>
+          <summary><span data-icon="code"></span><span id="json-title"></span></summary>
           <pre id="request-json"></pre>
         </details>
         <div class="submit">
           <a id="open-issue" class="cta" target="_blank" rel="noopener noreferrer" aria-disabled="true">
-            <span>Open on GitHub</span><span data-icon="external"></span>
+            <span id="open-label"></span><span data-icon="external"></span>
           </a>
-          <button id="copy-link" type="button" class="ghost" disabled aria-label="Copy link"><span data-icon="copy"></span></button>
+          <button id="copy-link" type="button" class="ghost" disabled><span data-icon="copy"></span></button>
         </div>
         <p id="tick-reminder" class="note tick" hidden></p>
-        <p class="note">You need access to <span id="repo-name"></span> on GitHub. After you submit, a bot replies on the issue with the pull request, or with what to fix.</p>
+        <p id="access" class="note"></p>
       </aside>
     </div>
   </main>
