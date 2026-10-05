@@ -347,7 +347,7 @@ function update(changedField) {
   // A form-level refusal (nothing changed yet) shows in the bar, as it has no field.
   if (!result.ok && !missing && result.errors.length && touched.size) status.replaceChildren(icon("alert"), el("span", { text: result.errors[0] }));
 
-  lastLink = issueLink(data.repository, form, values, issueTitle(form, result.request, data));
+  lastLink = issueLink(data.repository, form, values, issueTitle(form, result.request, data), data);
   const open = $("open-issue");
   open.classList.toggle("waiting", !result.ok);
   if (result.ok) {

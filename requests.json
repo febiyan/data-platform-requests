@@ -1,7 +1,7 @@
 {
   "formatVersion": "v1",
   "repository": "febiyan/data-platform-contract",
-  "revision": "2dd1f1379807ba65835e6442bc61a56c7bb69c1e",
+  "revision": "6d71536acc12a17669e42f5333b1371ea3c8ace0",
   "title": "Data platform requests",
   "description": "Ask for a team or a workspace. Your answers are checked as you type and you see what will happen. Then GitHub opens with everything filled in, ready to submit.",
   "site": {
@@ -73,6 +73,7 @@
       "dataAsOf": "Teams and workspaces as of {revision}. The bot checks every request again against the latest state."
     },
     "issueForm": {
+      "fromSite": "Sent from the request site. You can still change the answers below before you submit; keep the headings as they are.",
       "showIf": "Only if you picked {value}.",
       "showIfAny": "Only if you picked a {field}.",
       "footer": "After you submit, the bot replies here with a pull request, or with what to fix. To fix a request, edit this issue: it runs again when you save."

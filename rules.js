@@ -354,14 +354,31 @@ export function issueTitle(form, request, state) {
   return /\{[\w.]+\}/.test(title) ? form.title : title;
 }
 
-// A new-issue link that opens the issue form with the answers filled in.
-// GitHub fills each field from the query parameter named after its id.
-export function issueLink(repository, form, values, title) {
-  const query = new URLSearchParams({ template: `${form.template}.yml`, title });
+// The issue body an issue form would produce: "### <label>" then the answer,
+// ticked boxes as "- [X] <choice>". GitHub can prefill only an issue form's
+// text fields from a link, not its dropdowns or boxes, so the site opens a
+// plain issue with this body instead. The marker names the action;
+// forms.py --parse reads it like the request:<action> label.
+export function issueBody(form, values, state) {
+  const none = "_No response_";
+  const parts = [`<!-- platform-request: ${form.action} -->`, state.site.issueForm.fromSite];
   for (const field of form.fields) {
     const raw = values[field.id];
-    if (Array.isArray(raw)) { if (raw.length) query.set(field.id, raw.join(",")); }
-    else if (String(raw || "").trim()) query.set(field.id, String(raw).trim());
+    let answer;
+    if (field.widget === "checkboxes") answer = field.options.map((o) => `- [${(raw || []).includes(o.label) ? "X" : " "}] ${o.label}`).join("\n");
+    else answer = String(raw || "").trim() || none;
+    parts.push(`### ${field.label}\n\n${answer}`);
   }
+  return parts.join("\n\n");
+}
+
+// A new-issue link with the whole request in the body. The labels apply when
+// the requester may label issues; otherwise the bot adds them from the marker.
+export function issueLink(repository, form, values, title, state) {
+  const query = new URLSearchParams({
+    title,
+    labels: `platform-request,request:${form.action}`,
+    body: issueBody(form, values, state),
+  });
   return `https://github.com/${repository}/issues/new?${query}`;
 }
