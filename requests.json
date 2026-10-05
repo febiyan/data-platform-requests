@@ -1,7 +1,7 @@
 {
   "formatVersion": "v1",
   "repository": "febiyan/data-platform-contract",
-  "revision": "a01055f5580e076b90e638882852fd2409c16679",
+  "revision": "2dd1f1379807ba65835e6442bc61a56c7bb69c1e",
   "title": "Data platform requests",
   "description": "Ask for a team or a workspace. Your answers are checked as you type and you see what will happen. Then GitHub opens with everything filled in, ready to submit.",
   "site": {
